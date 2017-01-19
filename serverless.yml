@@ -14,7 +14,7 @@ plugins:
 
 custom:
   build:
-    deploy: false
+    deploy: true
     modules:
       exclude:
         - aws-sdk
@@ -23,3 +23,6 @@ custom:
     balili: true
     sourceMaps: false
     functions:
+      save:
+        include:
+          - index.js
