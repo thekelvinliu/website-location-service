@@ -1,0 +1,8 @@
+{
+  "name": "website-location-service",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "repository": "git@github.com:thekelvinliu/website-location-service.git",
+  "author": "thekelvinliu <kelvin@thekelvinliu.com>",
+  "license": "MIT"
+}
