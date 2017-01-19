@@ -9,9 +9,11 @@
     "aws-sdk": "^2.7.25",
     "babel-runtime": "^6.20.0",
     "bluebird": "^3.4.7",
+    "node-fetch": "^1.6.3",
     "random-js": "^1.0.8"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-env": "^1.1.8",
     "eslint": "^3.13.1",
@@ -19,10 +21,13 @@
     "serverless-mocha-plugin": "^1.3.2"
   },
   "scripts": {
-    "build": "sls deploy --no-deploy",
+    "clean": "basename $(find src -type f) | xargs rm -rf .DS_Store .serverless",
     "prebuild": "yarn run lint",
-    "deploy": "sls deploy",
-    "predeploy": "yarn run lint",
-    "lint": "./node_modules/.bin/eslint index.js"
+    "build": "babel $BABEL_OPTS src -d .",
+    "predeploy": "yarn run build",
+    "deploy": "sls deploy $DEPLOY_OPTS",
+    "deploy:dry": "DEPLOY_OPTS=--no-deploy yarn run deploy",
+    "dev": "BABEL_OPTS=--watch yarn run build",
+    "lint": "eslint src"
   }
 }
