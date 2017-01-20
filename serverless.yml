@@ -10,20 +10,18 @@ functions:
   #   handler: getLocation.handler
   updateLocation:
     handler: updateLocation.handler
-    # environment:
-    #   UPDATE_USER: ${env:}
+    environment:
+      TEST1: this is a test
+      TEST2: ${env:TEST2}
     events:
       - http: GET update
 
 plugins:
   - serverless-build-plugin
-  - serverless-crypt
   - serverless-mocha-plugin
   - serverless-offline
 
 custom:
-  # serverless-crypt
-  cryptKeyId: ${env:AWS_KMS_KEYID}
   # serverless-build-plugin
   build:
     deploy: true
