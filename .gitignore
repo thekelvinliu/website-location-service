@@ -1,3 +1,6 @@
-/index.js
 .serverless
 yarn.lock
+/getLocation.js
+/lib.js
+/test
+/updateLocation.js
