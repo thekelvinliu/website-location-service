@@ -5,10 +5,10 @@ provider:
   runtime: nodejs4.3
 
 functions:
-  updateLocation:
-    handler: updateLocation.handler
   getLocation:
     handler: getLocation.handler
+  updateLocation:
+    handler: updateLocation.handler
 
 plugins:
   - serverless-build-plugin
@@ -24,7 +24,12 @@ custom:
     babel: true
     balili: true
     sourceMaps: false
+    include:
+      - lib.js
     functions:
-      save:
+      getLocation:
         include:
-          - index.js
+          - getLocation.js
+      updateLocation:
+        include:
+          - updateLocation.js
