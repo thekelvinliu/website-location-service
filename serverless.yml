@@ -3,18 +3,28 @@ service: website-location-service
 provider:
   name: aws
   runtime: nodejs4.3
+  cfLogs: true
 
 functions:
-  getLocation:
-    handler: getLocation.handler
+  # getLocation:
+  #   handler: getLocation.handler
   updateLocation:
     handler: updateLocation.handler
+    # environment:
+    #   UPDATE_USER: ${env:}
+    events:
+      - http: GET update
 
 plugins:
   - serverless-build-plugin
+  - serverless-crypt
   - serverless-mocha-plugin
+  - serverless-offline
 
 custom:
+  # serverless-crypt
+  cryptKeyId: ${env:AWS_KMS_KEYID}
+  # serverless-build-plugin
   build:
     deploy: true
     modules:
@@ -27,9 +37,9 @@ custom:
     include:
       - lib.js
     functions:
-      getLocation:
-        include:
-          - getLocation.js
+      # getLocation:
+      #   include:
+      #     - getLocation.js
       updateLocation:
         include:
           - updateLocation.js
