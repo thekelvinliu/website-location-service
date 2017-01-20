@@ -5,8 +5,10 @@ provider:
   runtime: nodejs4.3
 
 functions:
-  save:
-    handler: index.handler
+  updateLocation:
+    handler: updateLocation.handler
+  getLocation:
+    handler: getLocation.handler
 
 plugins:
   - serverless-build-plugin
