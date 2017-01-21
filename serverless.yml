@@ -11,8 +11,7 @@ functions:
   updateLocation:
     handler: updateLocation.handler
     environment:
-      TEST1: this is a test
-      TEST2: ${env:TEST2}
+      UPDATE_USER: ${env:YO_UPDATE_USER}
     events:
       - http: GET update
 
