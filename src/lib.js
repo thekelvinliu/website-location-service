@@ -13,11 +13,15 @@ export const GEONAMES_USER = 'kelvinliu';
 // functions
 // returns whether obj contains k
 export const contains = (obj, k) => typeof obj[k] !== 'undefined';
-// returns a string error message
-export const errStr = (code, str) => `[${code}] ${str}`;
+// throws an error with an http status code
+export const httpError = (code, msg) => {
+  let err = new Error(`[${code}] ${msg}`);
+  err.status = code;
+  throw err;
+};
 // returns json from a given url and query
-export const getJSON = async (u, q) => fetch([u, qs.stringify(q)].join('?'))
-  .then(res => res.json());
+export const getJSON = async (u, q) =>
+  fetch([u, qs.stringify(q)].join('?')).then(res => res.json());
 // returns whether obj is empty
 export const isEmpty = obj => {
   for (const k in obj)
