@@ -11,15 +11,48 @@ const expect = mochaPlugin.chai.expect;
 const wrapped = lambdaWrapper.wrap(mod, { handler: 'handler' });
 
 describe('updateLocation', () => {
-  before((done) => {
-//  lambdaWrapper.init(liveFunction); // Run the deployed lambda
-
-    done();
+  it('empty params results in 400', () =>
+    wrapped.run({
+      queryStringParameters: {}
+    }).then(res => {
+      expect(res.statusCode).to.be.equal(400);
+    })
+  );
+  it('invalid params results in 400', () => {
+    const payloads = [{
+      hello: 'world'
+    }, {
+      username: ''
+    }, {
+      location: ''
+    }];
+    payloads.forEach(params => {
+      wrapped.run({
+        queryStringParameters: params
+      }).then(res => expect(res.statusCode).to.be.equal(400));
+    });
   });
-
-  it('implement tests here', () => {
-    return wrapped.run({}).then((response) => {
-      expect(response).to.not.be.empty;
+  it('invalid username results in 403', () => {
+    const payloads = [{
+      username: '',
+      location: ''
+    }, {
+      username: '00000',
+      location: ''
+    }, {
+      username: '12345',
+      location: ''
+    }, {
+      username: '77777',
+      location: ''
+    }, {
+      username: 'null',
+      location: ''
+    }];
+    payloads.forEach(params => {
+      wrapped.run({
+        queryStringParameters: params
+      }).then(res => expect(res.statusCode).to.be.equal(403));
     });
   });
 });
