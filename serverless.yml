@@ -3,15 +3,14 @@ service: website-location-service
 provider:
   name: aws
   runtime: nodejs4.3
+  stage: dev
+  region: us-east-1
   cfLogs: true
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Query
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:Scan
         - dynamodb:GetItem
+        - dynamodb:PutItem
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 resources:
@@ -40,16 +39,22 @@ functions:
     name: ${self:service}-update-handler
     handler: updateLocation.handler
     environment:
+      NODE_ENV: ${self:custom.env.${opt:stage, self:provider.stage}}
       UPDATE_USER: ${env:YO_UPDATE_USER}
     events:
       - http: GET update
 
 plugins:
   - serverless-build-plugin
+  - serverless-dynamodb-local
   - serverless-mocha-plugin
   - serverless-offline
 
 custom:
+  # variables
+  env:
+    dev: development
+    prod: production
   # serverless-build-plugin
   build:
     deploy: true
@@ -58,7 +63,7 @@ custom:
         - aws-sdk
     method: bundle
     babel: true
-    balili: true
+    babili: true
     sourceMaps: false
     include:
       - lib.js
