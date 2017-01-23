@@ -2,6 +2,7 @@
 
 import AWS from 'aws-sdk';
 import Promise from 'bluebird';
+import slsDC from 'serverless-dynamodb-client';
 import * as lib from './lib.js';
 
 // use bluebird promises
@@ -33,13 +34,25 @@ export const handler = async (event, context, callback) => {
     // ensure that the request was sent by a the valid user
     .then(params =>
       (params.username === process.env.UPDATE_USER)
-        ? params.location.split(';').map(parseFloat)
+        ? params
         : lib.httpError(403, `username '${params.username}' is not valid`))
+    // DEBUG: log username
+    .then(debug => {
+      console.log(debug.username);
+      return debug;
+    })
+    // extract and convert location data
+    .then(({ location }) => location.split(';').map(parseFloat))
     // ensure that the location is valid lat;lng coordinates
     .then(loc =>
       (loc.length === 2 && !loc.some(isNaN))
         ? loc
         : lib.httpError(400, `location (${loc.join(', ')} is not valid`))
+    // DEBUG: log location
+    .then(debug => {
+      console.log(debug);
+      return debug;
+    })
     // request geonames api
     .then(([lat, lng]) => lib.getJSON(lib.GEONAMES_URL, {
       username: lib.GEONAMES_USER,
@@ -69,7 +82,7 @@ export const handler = async (event, context, callback) => {
     }))
     // save location data
     .then(payload =>
-      new AWS.DynamoDB.DocumentClient().put({
+      slsDC.doc.put({
         TableName: 'locations',
         Item: payload
       }).promise())
