@@ -7,6 +7,9 @@ import fetch from 'node-fetch';
 fetch.Promise = bluebird;
 
 // constants
+export const DYNAMO_PARAMS = (process.env.IS_OFFLINE)
+  ? { region: 'localhost', endpoint: 'http://localhost:8000' }
+  : {};
 export const GEONAMES_URL = 'http://api.geonames.org/findNearbyPlaceNameJSON';
 export const GEONAMES_USER = 'kelvinliu';
 
