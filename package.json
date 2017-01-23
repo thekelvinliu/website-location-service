@@ -9,7 +9,8 @@
     "aws-sdk": "^2.7.27",
     "babel-runtime": "^6.22.0",
     "bluebird": "^3.4.7",
-    "node-fetch": "^1.6.3"
+    "node-fetch": "^1.6.3",
+    "serverless-dynamodb-client": "^0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
@@ -17,6 +18,7 @@
     "babel-preset-env": "^1.1.8",
     "eslint": "^3.14.0",
     "serverless-build-plugin": "^1.1.2",
+    "serverless-dynamodb-local": "^0.2.16",
     "serverless-mocha-plugin": "^1.3.2",
     "serverless-offline": "^3.8.3"
   },
@@ -25,8 +27,9 @@
     "prebuild": "yarn run lint",
     "build": "babel $BABEL_OPTS src -d .",
     "predeploy": "yarn run test",
-    "deploy": "sls deploy $DEPLOY_OPTS",
-    "deploy:dry": "DEPLOY_OPTS=--no-deploy yarn run deploy",
+    "$deploy": "sls deploy $DEPLOY_OPTS",
+    "deploy:dry": "DEPLOY_OPTS=--no-deploy yarn run $deploy",
+    "deploy:prod": "DEPLOY_OPTS='--stage prod' yarn run $deploy",
     "dev": "BABEL_OPTS=--watch yarn run build",
     "lint": "eslint src",
     "test": "sls invoke test -f",
