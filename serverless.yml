@@ -59,6 +59,10 @@ custom:
   env:
     dev: development
     prod: production
+  # serverless-dynamodb-local
+  dynamodb:
+    start:
+      migration: true
   # serverless-build-plugin
   build:
     deploy: true

@@ -1,0 +1,21 @@
+{
+    "Table": {
+        "TableName": "locations",
+        "KeySchema": [
+            {
+                "AttributeName": "createdDate",
+                "KeyType": "HASH"
+            }
+        ],
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "createdDate",
+                "AttributeType": "N"
+            }
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+        }
+    }
+}
