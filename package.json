@@ -33,8 +33,8 @@
     "dev": "BABEL_OPTS=--watch yarn run build",
     "lint": "eslint src",
     "offline": "sls offline",
-    "preoffline": "yarn run dev & echo \"$!\" | pbcopy",
+    "preoffline": "yarn run build",
     "test": "sls invoke test -f",
-    "pretest": "yarn run build"
+    "pretest": "yarn run offline"
   }
 }
