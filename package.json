@@ -33,6 +33,7 @@
     "lint": "eslint src",
     "offline": "sls offline",
     "preoffline": "yarn run build",
-    "test": "sls invoke test -f"
+    "test": "sls invoke test -f",
+    "pretest": "yarn run build"
   }
 }
