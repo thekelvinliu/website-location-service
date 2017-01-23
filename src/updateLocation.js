@@ -58,7 +58,7 @@ export const handler = async (event, context, callback) => {
       countryCode: info.countryCode,
       countryId: info.countryId,
       countryName: info.countryName,
-      date: dt,
+      createdDate: dt,
       distance: info.distance,
       geonameId: info.geonameId,
       lat: parseFloat(info.lat),
@@ -68,11 +68,11 @@ export const handler = async (event, context, callback) => {
       toponymName: info.toponymName
     }))
     // save location data
-    // .then(payload =>
-    //   new AWS.DynamoDB.DocumentClient().put({
-    //     TableName: 'locations',
-    //     Item: payload
-    //   })).promise()
+    .then(payload =>
+      new AWS.DynamoDB.DocumentClient().put({
+        TableName: 'locations',
+        Item: payload
+      }).promise())
     // final then
     .then(result => callback(null, createResponse(200, result)))
     // log the error message and do the callback
