@@ -16,6 +16,7 @@ const createResponse = (code, message) => ({
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
 export const handler = async (event, context, callback) => {
+  console.log(lib.UPDATE_TABLE, lib.UPDATE_USER);
   // save the datetime
   const dt = Date.now();
   // promise chain let's go
@@ -32,7 +33,7 @@ export const handler = async (event, context, callback) => {
         : lib.httpError(400, 'request is missing username and/or location'))
     // ensure that the request was sent by a the valid user
     .then(params =>
-      (params.username === process.env.UPDATE_USER)
+      (params.username === lib.UPDATE_USER)
         ? params
         : lib.httpError(403, `username '${params.username}' is not valid`))
     // extract and convert location data
@@ -72,7 +73,7 @@ export const handler = async (event, context, callback) => {
     // save location data
     .then(payload =>
       new AWS.DynamoDB.DocumentClient(lib.DYNAMO_PARAMS).put({
-        TableName: 'locations',
+        TableName: lib.UPDATE_TABLE,
         Item: payload
       }).promise()
         // log the saved payload

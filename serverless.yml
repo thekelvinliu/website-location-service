@@ -7,6 +7,7 @@ provider:
   region: us-east-1
   # serverless-offline doesn't support function scoped variables
   environment:
+    LOCATION_TABLE: ${self:custom.table.locations}
     NODE_ENV: ${self:custom.env.${opt:stage, self:provider.stage}}
     UPDATE_USER: ${env:YO_UPDATE_USER}
   cfLogs: true
@@ -22,7 +23,7 @@ resources:
     locationsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: locations
+        TableName: ${self:custom.table.locations}
         KeySchema:
           - AttributeName: createdDate
             KeyType: HASH
@@ -59,6 +60,8 @@ custom:
   env:
     dev: development
     prod: production
+  table:
+    locations: ${self:service}-${opt:stage, self:provider.stage}-locations
   # serverless-dynamodb-local
   dynamodb:
     start:
