@@ -21,49 +21,23 @@ resources:
       Properties:
         TableName: locations
         KeySchema:
-          - AttributeName: date
+          - AttributeName: createdDate
             KeyType: HASH
         AttributeDefinitions:
-          - AttributeName: date
+          - AttributeName: createdDate
             AttributeType: N
-          # - AttributeName: adminCode1
-          #   AttributeType: S
-          # - AttributeName: adminName1
-          #   AttributeType: S
-          # - AttributeName: countryCode
-          #   AttributeType: S
-          # - AttributeName: countryId
-          #   AttributeType: S
-          # - AttributeName: countryName
-          #   AttributeType: S
-          # - AttributeName: distance
-          #   AttributeType: S
-          # - AttributeName: geonameId
-          #   AttributeType: N
-          - AttributeName: lat
-            AttributeType: N
-          - AttributeName: lng
-            AttributeType: N
-          # - AttributeName: name
-          #   AttributeType: S
-          # - AttributeName: population
-          #   AttributeType: N
-          # - AttributeName: x
-          #   AttributeType: S
-          # - AttributeName: toponymName
-          #   AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
 functions:
   # getLocation:
-  #   name: get
+  #   name: ${self:service}-get-handler
   #   handler: getLocation.handler
   #   events:
   #     - http: GET get
   updateLocation:
-    name: update
+    name: ${self:service}-update-handler
     handler: updateLocation.handler
     environment:
       UPDATE_USER: ${env:YO_UPDATE_USER}
