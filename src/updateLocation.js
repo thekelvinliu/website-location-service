@@ -1,7 +1,11 @@
 'use strict';
 
-// import Promise from 'bluebird';
+import AWS from 'aws-sdk';
+import Promise from 'bluebird';
 import * as lib from './lib.js';
+
+// use bluebird promises
+AWS.config.setPromisesDependency(Promise);
 
 // returns a simple response object
 const createResponse = (code, message) => ({
@@ -12,6 +16,9 @@ const createResponse = (code, message) => ({
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
 export const handler = async (event, context, callback) => {
+  // save the datetime
+  const dt = Date.now();
+  // promise chain let's go
   Promise.resolve(event)
     // ensure that the request has parameters
     .then(event =>
@@ -44,7 +51,28 @@ export const handler = async (event, context, callback) => {
       (lib.contains(data, 'geonames') && !lib.isEmpty(data.geonames[0]))
         ? data.geonames[0]
         : lib.httpError(500, 'geonames request failed'))
+    // filter only certain properties
+    .then(info => ({
+      adminCode1: info.adminCode1,
+      adminName1: info.adminName1,
+      countryCode: info.countryCode,
+      countryId: info.countryId,
+      countryName: info.countryName,
+      date: dt,
+      distance: info.distance,
+      geonameId: info.geonameId,
+      lat: parseFloat(info.lat),
+      lng: parseFloat(info.lng),
+      name: info.name,
+      population: info.population,
+      toponymName: info.toponymName
+    }))
     // save location data
+    // .then(payload =>
+    //   new AWS.DynamoDB.DocumentClient().put({
+    //     TableName: 'locations',
+    //     Item: payload
+    //   })).promise()
     // final then
     .then(result => callback(null, createResponse(200, result)))
     // log the error message and do the callback

@@ -4,11 +4,66 @@ provider:
   name: aws
   runtime: nodejs4.3
   cfLogs: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Scan
+        - dynamodb:GetItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+resources:
+  Resources:
+    locationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: locations
+        KeySchema:
+          - AttributeName: date
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: date
+            AttributeType: N
+          # - AttributeName: adminCode1
+          #   AttributeType: S
+          # - AttributeName: adminName1
+          #   AttributeType: S
+          # - AttributeName: countryCode
+          #   AttributeType: S
+          # - AttributeName: countryId
+          #   AttributeType: S
+          # - AttributeName: countryName
+          #   AttributeType: S
+          # - AttributeName: distance
+          #   AttributeType: S
+          # - AttributeName: geonameId
+          #   AttributeType: N
+          - AttributeName: lat
+            AttributeType: N
+          - AttributeName: lng
+            AttributeType: N
+          # - AttributeName: name
+          #   AttributeType: S
+          # - AttributeName: population
+          #   AttributeType: N
+          # - AttributeName: x
+          #   AttributeType: S
+          # - AttributeName: toponymName
+          #   AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 functions:
   # getLocation:
+  #   name: get
   #   handler: getLocation.handler
+  #   events:
+  #     - http: GET get
   updateLocation:
+    name: update
     handler: updateLocation.handler
     environment:
       UPDATE_USER: ${env:YO_UPDATE_USER}
