@@ -16,7 +16,6 @@ const createResponse = (code, message) => ({
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
 export const handler = async (event, context, callback) => {
-  console.log(lib.UPDATE_TABLE, lib.UPDATE_USER);
   // save the datetime
   const dt = Date.now();
   // promise chain let's go
