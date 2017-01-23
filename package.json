@@ -24,10 +24,12 @@
     "clean": "basename `find src -depth 1` | xargs rm -rf .DS_Store .serverless",
     "prebuild": "yarn run lint",
     "build": "babel $BABEL_OPTS src -d .",
-    "predeploy": "yarn run build",
+    "predeploy": "yarn run test",
     "deploy": "sls deploy $DEPLOY_OPTS",
     "deploy:dry": "DEPLOY_OPTS=--no-deploy yarn run deploy",
     "dev": "BABEL_OPTS=--watch yarn run build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "sls invoke test -f",
+    "pretest": "yarn run build"
   }
 }
