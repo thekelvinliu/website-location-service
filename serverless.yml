@@ -35,11 +35,11 @@ resources:
           WriteCapacityUnits: 1
 
 functions:
-  # getLocation:
-  #   name: ${self:service}-get-handler
-  #   handler: getLocation.handler
-  #   events:
-  #     - http: GET get
+  getLocation:
+    name: ${self:service}-get-handler
+    handler: getLocation.handler
+    events:
+      - http: GET get
   updateLocation:
     name: ${self:service}-update-handler
     handler: updateLocation.handler
@@ -79,9 +79,9 @@ custom:
     include:
       - lib.js
     functions:
-      # getLocation:
-      #   include:
-      #     - getLocation.js
+      getLocation:
+        include:
+          - getLocation.js
       updateLocation:
         include:
           - updateLocation.js
