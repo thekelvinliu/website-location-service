@@ -32,6 +32,8 @@
     "deploy:prod": "DEPLOY_OPTS='--stage prod' yarn run $deploy",
     "dev": "BABEL_OPTS=--watch yarn run build",
     "lint": "eslint src",
+    "offline": "sls offline",
+    "preoffline": "yarn run dev & echo \"$!\" | pbcopy",
     "test": "sls invoke test -f",
     "pretest": "yarn run build"
   }
