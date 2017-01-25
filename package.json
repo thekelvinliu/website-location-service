@@ -25,7 +25,7 @@
     "clean": "basename `find src -depth 1` | xargs rm -rf .DS_Store .serverless",
     "prebuild": "yarn run lint",
     "build": "babel $BABEL_OPTS src -d .",
-    "predeploy": "yarn run test",
+    "predeploy": "yarn run tests",
     "deploy": "sls deploy $DEPLOY_OPTS",
     "deploy:dry": "DEPLOY_OPTS=--no-deploy yarn run deploy",
     "deploy:prod": "DEPLOY_OPTS='--stage prod' yarn run deploy",
@@ -34,6 +34,8 @@
     "offline": "sls offline",
     "preoffline": "yarn run build",
     "test": "sls invoke test -f",
-    "pretest": "yarn run build"
+    "pretest": "yarn run build",
+    "tests": "sls invoke test",
+    "pretests": "yarn run build"
   }
 }
