@@ -55,4 +55,21 @@ describe('updateLocation', () => {
       }).then(res => expect(res.statusCode).to.be.equal(403));
     });
   });
+  it('invalid location results in 400', () => {
+    const payloads = [{
+      location: ''
+    }, {
+      location: 'a string'
+    }, {
+      location: 'thirty-five;sixty'
+    }, {
+      location: '1;2;3'
+    }];
+    payloads.forEach(params => {
+      params.username = process.env.UPDATE_USER;
+      wrapped.run({
+        queryStringParameters: params
+      }).then(res => expect(res.statusCode).to.be.equal(400));
+    });
+  });
 });
