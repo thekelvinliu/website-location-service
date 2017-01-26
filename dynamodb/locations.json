@@ -3,11 +3,19 @@
         "TableName": "locations",
         "KeySchema": [
             {
-                "AttributeName": "createdDate",
+                "AttributeName": "ver",
                 "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "createdDate",
+                "KeyType": "RANGE"
             }
         ],
         "AttributeDefinitions": [
+            {
+                "AttributeName": "ver",
+                "AttributeType": "N"
+            },
             {
                 "AttributeName": "createdDate",
                 "AttributeType": "N"

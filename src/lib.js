@@ -1,15 +1,15 @@
 'use strict';
 
 import qs from 'querystring';
-import bluebird from 'bluebird';
+import AWS from 'aws-sdk';
+import BbPromise from 'bluebird';
 import fetch from 'node-fetch';
-// make fetch use bluebird promises
-fetch.Promise = bluebird;
+
+// plug bluebird
+AWS.config.setPromisesDependency(Promise);
+fetch.Promise = BbPromise;
 
 // constants
-export const DYNAMO_PARAMS = (process.env.IS_OFFLINE)
-  ? { region: 'localhost', endpoint: 'http://localhost:8000' }
-  : {};
 export const GEONAMES_URL = 'http://api.geonames.org/findNearbyPlaceNameJSON';
 export const GEONAMES_USER = 'kelvinliu';
 export const LOCATION_TABLE = (process.env.IS_OFFLINE)
@@ -25,6 +25,12 @@ export const createResponse = (code, message) => ({
   statusCode: code,
   body: JSON.stringify({ message })
 });
+// returns an dynamodb document client
+export const dynamoClient = () => new AWS.DynamoDB.DocumentClient(
+  (process.env.IS_OFFLINE)
+    ? { region: 'localhost', endpoint: 'http://localhost:8000' }
+    : {}
+);
 // throws an error with an http status code
 export const httpError = (code, msg) => {
   let err = new Error(`[${code}] ${msg}`);

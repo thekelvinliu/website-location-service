@@ -1,11 +1,7 @@
 'use strict';
 
-import AWS from 'aws-sdk';
 import Promise from 'bluebird';
 import * as lib from './lib.js';
-
-// use bluebird promises for aws requests
-AWS.config.setPromisesDependency(Promise);
 
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
@@ -61,11 +57,12 @@ export const handler = async (event, context, callback) => {
       lng: parseFloat(info.lng),
       name: info.name,
       population: info.population,
-      toponymName: info.toponymName
+      toponymName: info.toponymName,
+      ver: 1
     }))
     // save location data
     .then(payload =>
-      new AWS.DynamoDB.DocumentClient(lib.DYNAMO_PARAMS).put({
+      lib.dynamoClient().put({
         TableName: lib.LOCATION_TABLE,
         Item: payload
       }).promise()
