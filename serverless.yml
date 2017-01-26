@@ -43,9 +43,6 @@ functions:
   updateLocation:
     name: ${self:service}-update-handler
     handler: updateLocation.handler
-    # environment:
-    #   NODE_ENV: ${self:custom.env.${opt:stage, self:provider.stage}}
-    #   UPDATE_USER: ${env:YO_UPDATE_USER}
     events:
       - http: GET update
 
