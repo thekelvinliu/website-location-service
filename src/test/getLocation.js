@@ -11,15 +11,9 @@ const expect = mochaPlugin.chai.expect;
 const wrapped = lambdaWrapper.wrap(mod, { handler: 'handler' });
 
 describe('getLocation', () => {
+  // set test flag
   before((done) => {
-//  lambdaWrapper.init(liveFunction); // Run the deployed lambda
-
+    process.env.IS_TEST = true;
     done();
-  });
-
-  it('implement tests here', () => {
-    return wrapped.run({}).then((response) => {
-      expect(response).to.not.be.empty;
-    });
   });
 });
