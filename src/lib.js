@@ -20,6 +20,11 @@ export const UPDATE_USER = process.env.UPDATE_USER;
 // functions
 // returns whether obj contains k
 export const contains = (obj, k) => typeof obj[k] !== 'undefined';
+// returns a simple response object
+export const createResponse = (code, message) => ({
+  statusCode: code,
+  body: JSON.stringify({ message })
+});
 // throws an error with an http status code
 export const httpError = (code, msg) => {
   let err = new Error(`[${code}] ${msg}`);

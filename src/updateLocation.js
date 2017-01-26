@@ -7,12 +7,6 @@ import * as lib from './lib.js';
 // use bluebird promises for aws requests
 AWS.config.setPromisesDependency(Promise);
 
-// returns a simple response object
-const createResponse = (code, message) => ({
-  statusCode: code,
-  body: JSON.stringify({ message })
-});
-
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
 export const handler = async (event, context, callback) => {
@@ -81,10 +75,10 @@ export const handler = async (event, context, callback) => {
         return 'success';
       }))
     // final then calls the lambda callback
-    .then(result => callback(null, createResponse(200, result)))
+    .then(result => callback(null, lib.createResponse(200, result)))
     // log the error message and do the callback
     .catch(err => {
       console.log(err.message);
-      return callback(null, createResponse(err.status || 500, err.message));
+      return callback(null, lib.createResponse(err.status || 500, err.message));
     });
 };
