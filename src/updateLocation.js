@@ -72,7 +72,7 @@ export const handler = async (event, context, callback) => {
     // save location data
     .then(payload =>
       new AWS.DynamoDB.DocumentClient(lib.DYNAMO_PARAMS).put({
-        TableName: lib.UPDATE_TABLE,
+        TableName: lib.LOCATION_TABLE,
         Item: payload
       }).promise()
         // log the saved payload

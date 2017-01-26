@@ -12,7 +12,7 @@ export const DYNAMO_PARAMS = (process.env.IS_OFFLINE)
   : {};
 export const GEONAMES_URL = 'http://api.geonames.org/findNearbyPlaceNameJSON';
 export const GEONAMES_USER = 'kelvinliu';
-export const UPDATE_TABLE = (process.env.IS_OFFLINE)
+export const LOCATION_TABLE = (process.env.IS_OFFLINE)
   ? 'locations'
   : process.env.LOCATION_TABLE;
 export const UPDATE_USER = process.env.UPDATE_USER;
