@@ -11,6 +11,11 @@ const expect = mochaPlugin.chai.expect;
 const wrapped = lambdaWrapper.wrap(mod, { handler: 'handler' });
 
 describe('updateLocation', () => {
+  // set test flag
+  before((done) => {
+    process.env.IS_TEST = true;
+    done();
+  });
   it('empty params results in 400', () =>
     wrapped.run({
       queryStringParameters: {}

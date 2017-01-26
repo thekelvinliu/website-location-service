@@ -78,7 +78,7 @@ export const handler = async (event, context, callback) => {
     .then(result => callback(null, lib.createResponse(200, result)))
     // log the error message and do the callback
     .catch(err => {
-      console.log(err.message);
+      console.error(err.message);
       return callback(null, lib.createResponse(err.status || 500, err.message));
     });
 };
