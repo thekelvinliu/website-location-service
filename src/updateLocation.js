@@ -41,7 +41,7 @@ export const handler = async (event, context, callback) => {
     .then(loc =>
       (loc.length === 2 && !loc.some(isNaN))
         ? loc
-        : lib.httpError(400, `location (${loc.join(', ')} is not valid`))
+        : lib.httpError(400, `location (${loc.join(', ')}) is not valid`))
     // request geonames api
     .then(([lat, lng]) => lib.getJSON(lib.GEONAMES_URL, {
       username: lib.GEONAMES_USER,
