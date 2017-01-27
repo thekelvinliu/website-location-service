@@ -10,61 +10,60 @@ const expect = mochaPlugin.chai.expect;
 const wrapped = lambdaWrapper.wrap(mod, { handler: 'handler' });
 
 // dummy data
-// too big
-const D1 = {
-  Count: 3,
-  Items: [{
-    place: 'first'
-  }, {
-    place: 'second'
-  }, {
-    place: 'third'
-  }]
+const DUMMY = {
+  justRight: {
+    Count: 1,
+    Items: [{
+      message: 'hello world'
+    }]
+  },
+  tooBig: {
+    Count: 3,
+    Items: [{
+      place: 'first'
+    }, {
+      place: 'second'
+    }, {
+      place: 'third'
+    }]
+  },
+  tooSmall: {
+    Count: 0,
+    Items: []
+  }
 };
-// just right
-const D2 = {
-  Count: 1,
-  Items: [{
-    message: 'hello world'
-  }]
-};
-// too small
-const D3 = {
-  Count: 0,
-  Items: {}
-};
+// for convenience
+const DOC_CLIENT = 'DynamoDB.DocumentClient';
 
 // tests for getLocation
 describe('getLocation', () => {
-
-  before(done => {
-    // set IS_TEST environment variable
-    process.env.IS_TEST = true;
-    done();
-  });
-
-  afterEach(done => {
-    // remove mocks on DyanmoDB.DocumentClient
-    AWS.restore('DynamoDB.DocumentClient');
-    done();
-  });
-
-  it('query returning single item results in 200', () => {
-    AWS.mock('DynamoDB.DocumentClient', 'query', (_, cb) => cb(null, D2));
-    wrapped.run().then(res => expect(res.statusCode).to.be.equal(200));
-  });
-
-  it('query returning multiple items uses first item in list', () => {
-    AWS.mock('DynamoDB.DocumentClient', 'query', (_, cb) => cb(null, D1));
-    wrapped.run().then(res => {
-      expect(res.statusCode).to.be.equal(200);
-      expect(res.body).to.be.equal(JSON.stringify({ message: D1.Items[0] }));
+  describe('dynamo query', () => {
+    before('set IS_TEST environment variable', done => {
+      process.env.IS_TEST = true;
+      done();
+    });
+    afterEach('remove aws mocks', done => {
+      AWS.restore(DOC_CLIENT);
+      done();
+    });
+    it('should return 500 when query returns no items', () => {
+      AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.tooSmall));
+      return wrapped.run().then(res => expect(res.statusCode).to.be.equal(500));
+    });
+    it('should return 200 when query returns a single item', () => {
+      AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.justRight));
+      return wrapped.run().then(res => {
+        expect(res.statusCode).to.be.equal(200);
+      });
+    });
+    it('should return 200 and first item when query returns many items', () => {
+      AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.tooBig));
+      return wrapped.run().then(res => {
+        expect(res.statusCode).to.be.equal(200);
+        expect(res.body).to.be.equal(JSON.stringify({
+          message: DUMMY.tooBig.Items[0]
+        }));
+      });
     });
   });
-
-  it('query returning no items results in 500', () => {
-    AWS.mock('DynamoDB.DocumentClient', 'query', (_, cb) => cb(null, D3));
-    wrapped.run().then(res => expect(res.statusCode).to.be.equal(500));
-  });
-
 });
