@@ -81,7 +81,7 @@ describe('updateLocation', () => {
           queryStringParameters: payload
         }).then(res => expect(res.statusCode).to.be.equal(403))))
     );
-    it('should return 400 when location is invalid', () =>
+    it('should return 400 when location coordinates are invalid', () =>
       Promise.all([{
         location: ''
       }, {
@@ -91,15 +91,23 @@ describe('updateLocation', () => {
       }, {
         location: 'one-hundred;'
       }, {
-        location: 'forty-five;ninety-nine'
-      }, {
+        location: 'forty-five;ninety-three-point-five'
+      }].map(payload => Object.assign(payload, {
+        username: process.env.UPDATE_USER
+      }))
+        .map(payload => wrapped.run({
+          queryStringParameters: payload
+        }).then(res => expect(res.statusCode).to.be.equal(400))))
+    );
+    it('should return 400 when location is not a coordinate', () =>
+      Promise.all([{
         location: '20'
       }, {
         location: '100;'
       }, {
-        location: '45;99;'
+        location: '45;93.5;'
       }, {
-        location: '45;99;0'
+        location: '45;93.5;0'
       }].map(payload => Object.assign(payload, {
         username: process.env.UPDATE_USER
       }))

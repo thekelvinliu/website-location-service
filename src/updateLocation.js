@@ -8,6 +8,8 @@ import * as lib from './lib.js';
 export const handler = (event, context, callback) => {
   // save the datetime
   const dt = Date.now();
+  lib.logger.info('lambda triggered at', dt);
+  lib.logger.info('lambda triggered with', event.queryStringParameters||{});
   // promise chain let's go
   Promise.resolve(event)
     // ensure that the request has parameters
@@ -29,9 +31,18 @@ export const handler = (event, context, callback) => {
     .then(({ location }) => location.split(';').map(parseFloat))
     // ensure that the location is valid lat;lng coordinates
     .then(loc =>
-      (loc.length === 2 && !loc.some(isNaN))
+      (!loc.some(isNaN))
         ? loc
         : lib.httpError(400, `location (${loc.join(', ')}) is not valid`))
+    .then(loc =>
+      (loc.length === 2)
+        ? loc
+        : lib.httpError(400, `location (${loc.join(', ')}) isn't a coordinate`))
+    // log the location
+    .then(loc => {
+      lib.logger.info(`requesting data for (${loc.join(', ')})`);
+      return loc;
+    })
     // request geonames api
     .then(([lat, lng]) => lib.getJSON(lib.GEONAMES_URL, {
       username: lib.GEONAMES_USER,
