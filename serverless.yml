@@ -59,7 +59,7 @@ plugins:
 
 custom:
   # variables
-  domain: https://thekelvinliu.com
+  domain: thekelvinliu.com
   env:
     dev: development
     prod: production

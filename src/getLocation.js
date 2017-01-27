@@ -32,7 +32,7 @@ export const handler = async (event, context, callback) => {
     bfj.stringify(data.Items[0]).then(json => {
       lib.logger.info(`query found: ${json}`);
     });
-    return callback(null, await lib.createResponse(200, data.Items[0]));
+    return callback(null, await lib.createResponse(200, data.Items[0], event));
   } catch (err) {
     lib.logger.error(err.message);
     return callback(null, await lib.createResponse(err.status || 500, err.message));

@@ -22,16 +22,19 @@ export const UPDATE_USER = process.env.UPDATE_USER;
 // returns whether obj contains k
 export const contains = (obj, k) => typeof obj[k] !== 'undefined';
 // returns a simple response object
-export const createResponse = async (statusCode, message) =>
+export const createResponse = async (statusCode, message, event) =>
   bfj.stringify({ message })
     .then(body => ({
       statusCode,
-      headers: {
-        'Access-Control-Allow-Origin': process.env.DOMAIN,
-        'Access-Control-Allow-Credentials': true
-      },
       body
-    }));
+    }))
+    .then(res =>
+      (process.env.IS_OFFLINE || !event)
+        ? res
+        : Object.assign(res, {
+          'Access-Control-Allow-Origin': `https://${event.headers.Host}`,
+          'Access-Control-Allow-Credentials': true
+        }));
 // returns an dynamodb document client
 export const dynamoClient = () => new AWS.DynamoDB.DocumentClient(
   (process.env.IS_OFFLINE)
@@ -57,9 +60,9 @@ export const isEmpty = obj => {
 // a logger that only logs in non-test environments
 export const logger = {
   info(...args) {
-    if (!process.env.IS_TEST) console.info(...args);
+    if (!process.env.IS_TEST||process.env.DEBUG) console.info(...args);
   },
   error(...args) {
-    if (!process.env.IS_TEST) console.error(...args);
+    if (!process.env.IS_TEST||process.env.DEBUG) console.error(...args);
   }
 };
