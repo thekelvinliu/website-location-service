@@ -46,6 +46,10 @@ describe('getLocation', () => {
       AWS.restore(DOC_CLIENT);
       done();
     });
+    it('should return 500 when query returns too many items', () => {
+      AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.tooBig));
+      return wrapped.run().then(res => expect(res.statusCode).to.be.equal(500));
+    });
     it('should return 500 when query returns no items', () => {
       AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.tooSmall));
       return wrapped.run().then(res => expect(res.statusCode).to.be.equal(500));
@@ -54,15 +58,6 @@ describe('getLocation', () => {
       AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.justRight));
       return wrapped.run().then(res => {
         expect(res.statusCode).to.be.equal(200);
-      });
-    });
-    it('should return 200 and first item when query returns many items', () => {
-      AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.tooBig));
-      return wrapped.run().then(res => {
-        expect(res.statusCode).to.be.equal(200);
-        expect(res.body).to.be.equal(JSON.stringify({
-          message: DUMMY.tooBig.Items[0]
-        }));
       });
     });
   });
