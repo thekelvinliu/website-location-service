@@ -3,6 +3,7 @@ service: website-location-service
 provider:
   name: aws
   runtime: nodejs4.3
+  memorySize: 128
   stage: dev
   region: us-east-1
   cfLogs: true
