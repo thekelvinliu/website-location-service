@@ -10,8 +10,8 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:Query
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
   environment:
     LOCATION_TABLE: ${self:custom.table.locations}
