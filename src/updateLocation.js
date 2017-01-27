@@ -5,7 +5,7 @@ import * as lib from './lib.js';
 
 // lambda function handler
 // expected to get triggered by a yo location (yolo) via the yo api
-export const handler = async (event, context, callback) => {
+export const handler = (event, context, callback) => {
   // save the datetime
   const dt = Date.now();
   // promise chain let's go
@@ -68,14 +68,14 @@ export const handler = async (event, context, callback) => {
       }).promise()
         // log the saved payload
         .then(() => {
-        console.info('finished saving locaiton:', payload);
+        lib.logger.info('finished saving locaiton:', payload);
         return 'success';
       }))
     // final then calls the lambda callback
     .then(result => callback(null, lib.createResponse(200, result)))
     // log the error message and do the callback
     .catch(err => {
-      console.error(err.message);
+      lib.logger.error(err.message);
       return callback(null, lib.createResponse(err.status || 500, err.message));
     });
 };

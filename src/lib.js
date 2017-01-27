@@ -47,3 +47,12 @@ export const isEmpty = obj => {
       return false;
   return true;
 };
+// a logger that only logs in non-test environments
+export const logger = {
+  info(...args) {
+    if (!process.env.IS_TEST) console.info(...args);
+  },
+  error(...args) {
+    if (!process.env.IS_TEST) console.error(...args);
+  }
+};
