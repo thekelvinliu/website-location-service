@@ -83,10 +83,10 @@ export const handler = (event, context, callback) => {
         return 'success';
       }))
     // final then calls the lambda callback
-    .then(result => callback(null, lib.createResponse(200, result)))
+    .then(async result => callback(null, await lib.createResponse(200, result)))
     // log the error message and do the callback
-    .catch(err => {
+    .catch(async err => {
       lib.logger.error(err.message);
-      return callback(null, lib.createResponse(err.status || 500, err.message));
+      return callback(null, await lib.createResponse(err.status || 500, err.message));
     });
 };

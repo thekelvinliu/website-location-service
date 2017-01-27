@@ -8,6 +8,7 @@
   "dependencies": {
     "aws-sdk": "^2.8.0",
     "babel-runtime": "^6.22.0",
+    "bfj": "^2.1.2",
     "bluebird": "^3.4.7",
     "node-fetch": "^1.6.3"
   },

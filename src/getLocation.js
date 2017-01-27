@@ -1,5 +1,6 @@
 'use strict';
 
+import bfj from 'bfj';
 import * as lib from './lib.js';
 
 // lambda function handler
@@ -18,13 +19,18 @@ export const handler = async (event, context, callback) => {
       Limit: 1,
       ScanIndexForward: false
     }).promise();
-    if (data.Count !== 1)
-      lib.httpError(500, `query returned unexpected results: ${data}`);
+    // this should never happen because limit 1
+    if (data.Count !== 1) {
+      lib.httpError(500, `query returned unexpected results`);
+      bfj.stringify(data).then(json => lib.logger.error(json));
+    }
     // log the retrieved item
-    lib.logger.info(`query found: ${data.Items[0]}`);
-    return callback(null, lib.createResponse(200, data.Items[0]));
+    bfj.stringify(data.Items[0]).then(json => {
+      lib.logger.info(`query found: ${json}`);
+    });
+    return callback(null, await lib.createResponse(200, data.Items[0]));
   } catch (err) {
     lib.logger.error(err.message);
-    return callback(null, lib.createResponse(err.status || 500, err.message));
+    return callback(null, await lib.createResponse(err.status || 500, err.message));
   }
 };

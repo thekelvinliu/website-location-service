@@ -3,6 +3,7 @@
 import qs from 'querystring';
 import AWS from 'aws-sdk';
 import BbPromise from 'bluebird';
+import bfj from 'bfj';
 import fetch from 'node-fetch';
 
 // plug bluebird
@@ -21,10 +22,12 @@ export const UPDATE_USER = process.env.UPDATE_USER;
 // returns whether obj contains k
 export const contains = (obj, k) => typeof obj[k] !== 'undefined';
 // returns a simple response object
-export const createResponse = (code, message) => ({
-  statusCode: code,
-  body: JSON.stringify({ message })
-});
+export const createResponse = async (statusCode, message) =>
+  bfj.stringify(message)
+    .then(body => ({
+      statusCode,
+      body
+    }));
 // returns an dynamodb document client
 export const dynamoClient = () => new AWS.DynamoDB.DocumentClient(
   (process.env.IS_OFFLINE)
