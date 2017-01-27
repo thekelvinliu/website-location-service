@@ -3,6 +3,8 @@
 import bfj from 'bfj';
 import * as lib from './lib.js';
 
+let data;
+
 // lambda function handler
 // exprected to be triggered by the website and return most recent locaiton data
 export const handler = async (event, context, callback) => {
@@ -10,15 +12,17 @@ export const handler = async (event, context, callback) => {
   lib.logger.info('lambda triggered at', Date.now());
   // attempt to query dynamo
   try {
-    const data = await lib.dynamoClient().query({
-      TableName: lib.LOCATION_TABLE,
-      KeyConditionExpression: 'ver = :vn',
-      ExpressionAttributeValues: {
-        ':vn': 1
-      },
-      Limit: 1,
-      ScanIndexForward: false
-    }).promise();
+    // simple cache, but not during tests
+    if (!data || process.env.IS_TEST)
+      data = await lib.dynamoClient().query({
+        TableName: lib.LOCATION_TABLE,
+        KeyConditionExpression: 'ver = :vn',
+        ExpressionAttributeValues: {
+          ':vn': 1
+        },
+        Limit: 1,
+        ScanIndexForward: false
+      }).promise();
     // this should never happen because limit 1
     if (data.Count !== 1) {
       lib.httpError(500, `query returned unexpected results`);

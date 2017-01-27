@@ -163,7 +163,7 @@ describe('updateLocation', () => {
         queryStringParameters: DUMMY.valid
       }).then(res => {
         expect(res.statusCode).to.be.equal(200);
-        expect(res.body).to.be.equal(JSON.stringify({ message: 'success'}));
+        expect(res.body).to.be.equal(JSON.stringify('success'));
       });
     });
   });
