@@ -1,5 +1,7 @@
+.exports
 .serverless
 yarn.lock
+/dynamodb
 /getLocation.js
 /lib.js
 /test

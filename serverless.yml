@@ -5,11 +5,6 @@ provider:
   runtime: nodejs4.3
   stage: dev
   region: us-east-1
-  # serverless-offline doesn't support function scoped variables
-  environment:
-    LOCATION_TABLE: ${self:custom.table.locations}
-    NODE_ENV: ${self:custom.env.${opt:stage, self:provider.stage}}
-    UPDATE_USER: ${env:YO_UPDATE_USER}
   cfLogs: true
   iamRoleStatements:
     - Effect: Allow
@@ -17,6 +12,22 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
+  environment:
+    LOCATION_TABLE: ${self:custom.table.locations}
+    NODE_ENV: ${self:custom.env.${self:custom.stage}}
+    UPDATE_USER: ${env:YO_UPDATE_USER}
+
+functions:
+  getLocation:
+    name: ${self:service}-${self:custom.stage}-get-handler
+    handler: getLocation.handler
+    events:
+      - http: GET get
+  updateLocation:
+    name: ${self:service}-${self:custom.stage}-update-handler
+    handler: updateLocation.handler
+    events:
+      - http: GET update
 
 resources:
   Resources:
@@ -38,18 +49,6 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
-functions:
-  getLocation:
-    name: ${self:service}-get-handler
-    handler: getLocation.handler
-    events:
-      - http: GET get
-  updateLocation:
-    name: ${self:service}-update-handler
-    handler: updateLocation.handler
-    events:
-      - http: GET update
-
 plugins:
   - serverless-build-plugin
   - serverless-dynamodb-local
@@ -61,8 +60,9 @@ custom:
   env:
     dev: development
     prod: production
+  stage: ${opt:stage, self:provider.stage}
   table:
-    locations: ${self:service}-${opt:stage, self:provider.stage}-locations
+    locations: ${self:service}-${self:custom.stage}-locations
   # serverless-dynamodb-local
   dynamodb:
     start:
