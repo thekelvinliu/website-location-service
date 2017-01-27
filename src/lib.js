@@ -28,13 +28,10 @@ export const createResponse = async (statusCode, message, event) =>
       statusCode,
       body
     }))
-    .then(res =>
-      (process.env.IS_OFFLINE || !event)
-        ? res
-        : Object.assign(res, {
-          'Access-Control-Allow-Origin': `https://${event.headers.Host}`,
-          'Access-Control-Allow-Credentials': true
-        }));
+    .then(res => (!event) ? res : Object.assign(res, {
+      'Access-Control-Allow-Origin': `https://${event.headers.Host}`,
+      'Access-Control-Allow-Credentials': true
+    }));
 // returns an dynamodb document client
 export const dynamoClient = () => new AWS.DynamoDB.DocumentClient(
   (process.env.IS_OFFLINE)
