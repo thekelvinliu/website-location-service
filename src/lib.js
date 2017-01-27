@@ -23,9 +23,13 @@ export const UPDATE_USER = process.env.UPDATE_USER;
 export const contains = (obj, k) => typeof obj[k] !== 'undefined';
 // returns a simple response object
 export const createResponse = async (statusCode, message) =>
-  bfj.stringify(message)
+  bfj.stringify({ message })
     .then(body => ({
       statusCode,
+      headers: {
+        'Access-Control-Allow-Origin': process.env.DOMAIN,
+        'Access-Control-Allow-Credentials': true
+      },
       body
     }));
 // returns an dynamodb document client

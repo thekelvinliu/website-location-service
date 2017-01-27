@@ -14,6 +14,7 @@ provider:
         - dynamodb:Query
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
   environment:
+    DOMAIN: ${self:custom.domain}
     LOCATION_TABLE: ${self:custom.table.locations}
     NODE_ENV: ${self:custom.env.${self:custom.stage}}
     UPDATE_USER: ${env:YO_UPDATE_USER}
@@ -58,6 +59,7 @@ plugins:
 
 custom:
   # variables
+  domain: thekelvinliu.com
   env:
     dev: development
     prod: production
