@@ -24,7 +24,10 @@ functions:
     name: ${self:service}-${self:custom.stage}-get-handler
     handler: getLocation.handler
     events:
-      - http: GET get
+      - http:
+          path: get
+          method: GET
+          cors: true
   updateLocation:
     name: ${self:service}-${self:custom.stage}-update-handler
     handler: updateLocation.handler

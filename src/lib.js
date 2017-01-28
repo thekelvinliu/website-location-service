@@ -53,24 +53,18 @@ export const logger = {
   }
 };
 // returns a simple response object
-export const response = (code, msg, { headers } = { headers: {} }) =>
+export const response = (code, msg, cors = false) =>
   jprom.stringify({ message: msg })
     .then(body => ({
       statusCode: code,
+      headers: {},
       body
     }))
     .then(res => {
-      const host = headers.Host || '';
-      const validHost = [process.env.DOMAIN, 'ngrok.io', 'localhost']
-        .map(str => host.indexOf(str))
-        .some(val => val !== -1);
-      if (validHost)
-        res.headers = {
-          'Access-Control-Allow-Origin': ['http://', 'https://']
-            .map(protocol => `${protocol}${headers.Host}`)
-            .join(' '),
-          'Access-Control-Allow-Credentials': true
-        };
+      if (cors) {
+        res.headers['Access-Control-Allow-Origin'] = '*';
+        logger.info('cors is enabled for this response', res);
+      }
       return res;
     })
     .catch(err => {

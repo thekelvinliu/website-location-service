@@ -36,7 +36,7 @@ export const handler = async (event, context, callback) => {
     jprom.stringify(data.Items[0]).then(json => {
       lib.logger.info(`query found: ${json}`);
     });
-    return callback(null, await lib.response(200, data.Items[0], event));
+    return callback(null, await lib.response(200, data.Items[0], true));
   } catch (err) {
     lib.logger.error(err.message);
     return callback(null, await lib.response(err.status || 500, err.message));
