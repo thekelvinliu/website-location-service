@@ -9,7 +9,7 @@ export const handler = (event, context, callback) => {
   // save the datetime
   const dt = Date.now();
   lib.logger.info('lambda triggered at', dt);
-  lib.logger.info('lambda triggered with', event.queryStringParameters||{});
+  lib.logger.info('lambda triggered with', event.queryStringParameters || {});
   // promise chain let's go
   Promise.resolve(event)
     // ensure that the request has parameters
@@ -83,10 +83,10 @@ export const handler = (event, context, callback) => {
         return 'success';
       }))
     // final then calls the lambda callback
-    .then(async result => callback(null, await lib.createResponse(200, result)))
+    .then(async result => callback(null, await lib.response(200, result)))
     // log the error message and do the callback
     .catch(async err => {
       lib.logger.error(err.message);
-      return callback(null, await lib.createResponse(err.status || 500, err.message));
+      return callback(null, await lib.response(err.status || 500, err.message));
     });
 };

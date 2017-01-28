@@ -56,9 +56,7 @@ describe('getLocation', () => {
     });
     it('should return 200 when query returns a single item', () => {
       AWS.mock(DOC_CLIENT, 'query', (_, cb) => cb(null, DUMMY.justRight));
-      return wrapped.run().then(res => {
-        expect(res.statusCode).to.be.equal(200);
-      });
+      return wrapped.run().then(res => expect(res.statusCode).to.be.equal(200));
     });
   });
 });
