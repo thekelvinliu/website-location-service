@@ -19,41 +19,6 @@ provider:
     NODE_ENV: ${self:custom.env.${self:custom.stage}}
     UPDATE_USER: ${env:YO_UPDATE_USER}
 
-functions:
-  getLocation:
-    name: ${self:service}-${self:custom.stage}-get-handler
-    handler: getLocation.handler
-    events:
-      - http:
-          path: get
-          method: GET
-          cors: true
-  updateLocation:
-    name: ${self:service}-${self:custom.stage}-update-handler
-    handler: updateLocation.handler
-    events:
-      - http: GET update
-
-resources:
-  Resources:
-    locationsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.table.locations}
-        KeySchema:
-          - AttributeName: ver
-            KeyType: HASH
-          - AttributeName: createdDate
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: ver
-            AttributeType: N
-          - AttributeName: createdDate
-            AttributeType: N
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-
 plugins:
   - serverless-build-plugin
   - serverless-dynamodb-local
@@ -92,3 +57,38 @@ custom:
       updateLocation:
         include:
           - updateLocation.js
+
+functions:
+  getLocation:
+    name: ${self:service}-${self:custom.stage}-get-handler
+    handler: getLocation.handler
+    events:
+      - http:
+          path: get
+          method: GET
+          cors: true
+  updateLocation:
+    name: ${self:service}-${self:custom.stage}-update-handler
+    handler: updateLocation.handler
+    events:
+      - http: GET update
+
+resources:
+  Resources:
+    locationsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.table.locations}
+        KeySchema:
+          - AttributeName: ver
+            KeyType: HASH
+          - AttributeName: createdDate
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: ver
+            AttributeType: N
+          - AttributeName: createdDate
+            AttributeType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

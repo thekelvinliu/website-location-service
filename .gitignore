@@ -1,4 +1,4 @@
-.exports
+.ondir
 .serverless
 yarn.lock
 /dynamodb
