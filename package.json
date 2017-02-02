@@ -6,7 +6,7 @@
   "author": "thekelvinliu <kelvin@thekelvinliu.com>",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.8.0",
+    "aws-sdk": "^2.9.0",
     "babel-runtime": "^6.22.0",
     "bluebird": "^3.4.7",
     "json-promise": "^1.1.8",
