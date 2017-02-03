@@ -18,7 +18,7 @@ export const handler = async (event, context, callback) => {
         TableName: lib.LOCATION_TABLE,
         KeyConditionExpression: 'ver = :vn',
         ExpressionAttributeValues: {
-          ':vn': 1
+          ':vn': parseInt(process.env.CURRENT_VERSION, 10)
         },
         Limit: 1,
         ScanIndexForward: false

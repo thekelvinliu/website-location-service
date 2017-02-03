@@ -69,7 +69,7 @@ export const handler = (event, context, callback) => {
       name: info.name,
       population: info.population,
       toponymName: info.toponymName,
-      ver: 1
+      ver: parseInt(process.env.CURRENT_VERSION, 10)
     }))
     // save location data
     .then(payload =>

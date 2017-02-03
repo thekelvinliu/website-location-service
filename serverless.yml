@@ -14,7 +14,7 @@ provider:
         - dynamodb:Query
       Resource: "arn:aws:dynamodb:us-east-1:*:*"
   environment:
-    DOMAIN: ${self:custom.domain}
+    CURRENT_VERSION: ${env:CURRENT_VERSION}
     LOCATION_TABLE: ${self:custom.table.locations}
     NODE_ENV: ${self:custom.env.${self:custom.stage}}
     UPDATE_USER: ${env:YO_UPDATE_USER}
@@ -90,5 +90,5 @@ resources:
           - AttributeName: createdDate
             AttributeType: N
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
+          ReadCapacityUnits: 10
           WriteCapacityUnits: 1
